@@ -8,52 +8,52 @@ You're going to use Node.js to build a basic, REST-based chat server. You'll als
 
 ###Step 1: Create the Server (GET)
 Since we aren't worried about persistently storing information in a chat server (for now, anyway), your understanding of Node.js and REST will allow you to create a server that will post and retrieve messages (the C & R verbs of CRUD) for a chatroom.
-* In server.js, import the 'http' module and use the `createServer` method to listen on a port of your choosing (probably something between 8000 and 12000).
-* Create an array for storing your messages temporarily. You could call it `messages`.
-* Write your callback to the createServer method, remembering that it will be passed both a request and response parameter
-* Examine the request to see which REST verb was used (check the `method` property of the request param).
-* If the method is GET, return the messages array (JSON stringified) in the response. 
-  * Dont forget to set the appropriate headers for `Content-type` and `Access-Control-Allow-Origin`
-* To test your server, run it (`node server.js`) and use cURL or Postman to make a GET request to your server. Try putting in some pre-filled messages into your array to make sure it's returning data the way you expect.
+<!-- * In server.js, import the 'http' module and use the `createServer` method to listen on a port of your choosing (probably something between 8000 and 12000). -->
+<!-- * Create an array for storing your messages temporarily. You could call it `messages`. -->
+<!-- * Write your callback to the createServer method, remembering that it will be passed both a request and response parameter -->
+<!-- * Examine the request to see which REST verb was used (check the `method` property of the request param). -->
+<!-- * If the method is GET, return the messages array (JSON stringified) in the response.  -->
+  <!-- * Dont forget to set the appropriate headers for `Content-type` and `Access-Control-Allow-Origin` -->
+<!-- * To test your server, run it (`node server.js`) and use cURL or Postman to make a GET request to your server. Try putting in some pre-filled messages into your array to make sure it's returning data the way you expect. -->
 
 ###Step 2: Create the POST part of your server
 You're going to need to do a little bit of work to get the request data. It's easy to think that we could grab the data from a property like request.body or something, but what if we were uploading entire files to this endpoint? The file would need to be sent in pieces or chunks, and so servers have to be built to get data in stages. 
 
-With Node, the way you get those chunks of data is to watch for two events on the request object, like so:
+<!-- With Node, the way you get those chunks of data is to watch for two events on the request object, like so: -->
 
-```javascript
-var onRequest = function(req, res) {
-    if (req.method == 'POST') {
-       var postData = '';
-       req.on('data', function(chunk) {
-           postData += chunk.toString();
-        });    
-        req.on('end', function() {
-            console.log("Got POST data:");
-            console.log(JSON.parse(postData));
-       });
-    }
-}
-http.createServer(onRequest).listen(12200);
-```
+<!-- ```javascript -->
+<!-- var onRequest = function(req, res) { -->
+    <!-- if (req.method == 'POST') { -->
+       <!-- var postData = ''; -->
+       <!-- req.on('data', function(chunk) { -->
+           <!-- postData += chunk.toString(); -->
+        <!-- });     -->
+        <!-- req.on('end', function() { -->
+            <!-- console.log("Got POST data:"); -->
+            <!-- console.log(JSON.parse(postData)); -->
+       <!-- }); -->
+    <!-- } -->
+<!-- } -->
+<!-- http.createServer(onRequest).listen(12200); -->
+<!-- ``` -->
 
-In the future with Express, this will be much easier. But for now, here are the next to-dos:
-* If the request method is POST, add the message to your messages array, retrieving it from the request JSON body (see paragraph above). Make sure you end the response with a status, headers, and a body.
-* Test your server setup using Postman to add a new message via POST (make sure you use a "raw" request of type JSON)
+<!-- In the future with Express, this will be much easier. But for now, here are the next to-dos: -->
+<!-- * If the request method is POST, add the message to your messages array, retrieving it from the request JSON body (see paragraph above). Make sure you end the response with a status, headers, and a body. -->
+<!-- * Test your server setup using Postman to add a new message via POST (make sure you use a "raw" request of type JSON) -->
 
 ###Step 3: Finish the angular client
-* The MessageCtrl is already provided, as is the MessageService
-* Connect the MessageCtrl to the main.html view as an ng-controller
-* Populate the MessageService with a `getMessages` method that returns a promise which retrieves the chat messages for the app (Look at older Angular projects you've worked on for reference)
-* Add the service to MessageController.js, and call the `getMessages` method, populating the scope var on the `then` from the promise.
+<!-- * The MessageCtrl is already provided, as is the MessageService -->
+<!-- * Connect the MessageCtrl to the main.html view as an ng-controller -->
+<!-- * Populate the MessageService with a `getMessages` method that returns a promise which retrieves the chat messages for the app (Look at older Angular projects you've worked on for reference) -->
+<!-- * Add the service to MessageController.js, and call the `getMessages` method, populating the scope var on the `then` from the promise. -->
 
-```javascript
-MessageService.getMessages().then(function(data) {
-  $scope.messages = data;
-});
-```
+<!-- ```javascript -->
+<!-- MessageService.getMessages().then(function(data) { -->
+  <!-- $scope.messages = data; -->
+<!-- }); -->
+<!-- ``` -->
 
-* Use the ng-repeat directive to create div elements for every message so that you can display the messages from the server
+<!-- * Use the ng-repeat directive to create div elements for every message so that you can display the messages from the server -->
 
 ###Step 4: User input
 * Create a text input field and attach an ng-model to it.
